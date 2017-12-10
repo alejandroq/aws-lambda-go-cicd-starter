@@ -52,16 +52,16 @@ docker:
 		-w $(CURDIR)\
 		go-lambda-shim:latest make -f $(MAKEFILE) all
 
-docker-debug:
+docker-codebuild:
 	docker run -it --rm\
 		-e HANDLER=$(HANDLER)\
 		-e PACKAGE=$(PACKAGE)\
-		-e GOPATH=$(GOPATH)\
+		-e GOPATH=/usr/local/go\
 		-e LDFLAGS='$(LDFLAGS)'\
 		-v $(CURDIR):$(CURDIR)\
 		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
 		-w $(CURDIR)\
-		go-lambda-shim:latest bash
+		go-lambda-shim:latest make -f $(MAKEFILE) all
 
 .PHONY: docker
 
