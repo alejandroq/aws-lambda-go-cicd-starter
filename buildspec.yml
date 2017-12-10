@@ -2,7 +2,6 @@ version: 0.1
 phases:
   install:
     commands:
-      - sam help
       - docker-compose up
       - make docker-codebuild
       - aws cloudformation package --template-file template.yaml --s3-bucket alejandroquesada.com --output-template-file NewSamTemplate.yaml

@@ -64,15 +64,6 @@ docker-codebuild:
 		-w /root/go/src/go-lambda.com\
 		go-lambda-codebuild:latest make -f $(MAKEFILE) all
 
-# docker-codebuild:
-# 	docker run  -it --rm\
-# 		-e HANDLER=$(HANDLER)\
-# 		-e PACKAGE=$(PACKAGE)\
-# 		-e LDFLAGS='$(LDFLAGS)'\
-# 		-v $(CURDIR):/root/go/src/go-lambda.com\
-# 		-w /root/go/src/go-lambda.com\
-# 		go-lambda-codebuild:latest bash
-
 .PHONY: docker-codebuild
 
 all: test build pack perm
