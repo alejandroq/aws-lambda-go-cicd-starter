@@ -74,7 +74,6 @@ test:
 .PHONY: test
 
 build: dist
-	# go install -buildmode=plugin -ldflags='-w -s $(LDFLAGS)' ./src
 	go install -ldflags='-w -s $(LDFLAGS)' ./src
 	mv $(GOPATH)bin/src ./dist/$(HANDLER).so
 
