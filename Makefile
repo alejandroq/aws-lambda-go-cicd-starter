@@ -53,7 +53,7 @@ docker:
 		go-lambda-shim:latest make -f $(MAKEFILE) all
 
 docker-codebuild:
-	docker run -it --rm\
+	docker run --rm\
 		-e HANDLER=$(HANDLER)\
 		-e PACKAGE=$(PACKAGE)\
 		-e GOPATH=/usr/local/go\
