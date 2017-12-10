@@ -49,7 +49,18 @@ docker:
 		-v $(CURDIR):$(CURDIR)\
 		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
 		-w $(CURDIR)\
-		eawsy/aws-lambda-go-shim:latest make -f $(MAKEFILE) all
+		go-lambda-shim:latest make -f $(MAKEFILE) all
+
+docker-debug:
+	docker run -it --rm\
+		-e HANDLER=$(HANDLER)\
+		-e PACKAGE=$(PACKAGE)\
+		-e GOPATH=$(GOPATH)\
+		-e LDFLAGS='$(LDFLAGS)'\
+		-v $(CURDIR):$(CURDIR)\
+		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
+		-w $(CURDIR)\
+		go-lambda-shim:latest bash
 
 .PHONY: docker
 
@@ -57,17 +68,15 @@ all: test build pack perm
 
 .PHONY: all
 
-install:
-	go get -u -d github.com/eawsy/aws-lambda-go-core/...
-	go get -u -d github.com/eawsy/aws-lambda-go-event/...
-	
 test:
 	go test ./...
 
 .PHONY: test
 
-build:
-	go build -buildmode=plugin -ldflags='-w -s $(LDFLAGS)' -o dist/$(HANDLER).so
+build: dist
+	# go install -buildmode=plugin -ldflags='-w -s $(LDFLAGS)' ./src
+	go install -ldflags='-w -s $(LDFLAGS)' ./src
+	mv $(GOPATH)bin/src ./dist/$(HANDLER).so
 
 .PHONY: build
 

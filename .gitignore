@@ -14,7 +14,6 @@
 .glide/
 
 # Lambda distributed package
-dist/
 *.zip
 .DS_Store
 NewSamTemplate.yaml

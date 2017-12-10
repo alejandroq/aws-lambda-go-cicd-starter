@@ -23,4 +23,4 @@ aws cloudformation package --template-file samTemplate.yaml --s3-bucket <bucket-
 ```
 
 # safe deployments
-[Source](https://github.com/awslabs/serverless-application-model/blob/master/docs/safe_lambda_deployments.rst)
+[urce](https://github.com/awslabs/serverless-application-model/blob/master/docs/safe_lambda_deployments.rst)
