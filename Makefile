@@ -57,6 +57,10 @@ all: test build pack perm
 
 .PHONY: all
 
+install:
+	go get -u -d github.com/eawsy/aws-lambda-go-core/...
+	go get -u -d github.com/eawsy/aws-lambda-go-event/...
+	
 test:
 	go test ./...
 
