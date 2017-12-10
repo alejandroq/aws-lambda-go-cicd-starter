@@ -41,6 +41,7 @@ endif
 MAKEFILE = $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 
 docker:
+	echo $(CURDIR)
 	docker run --rm\
 		-e HANDLER=$(HANDLER)\
 		-e PACKAGE=$(PACKAGE)\
