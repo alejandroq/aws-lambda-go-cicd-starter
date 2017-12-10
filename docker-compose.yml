@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-  go-lambdas-shim:
+  go-lambda-codebuild:
     build:
       context: .
-      dockerfile: ./docker/docker.Dockerfile
-    container_name: go-lambda-shim
-    image: go-lambda-shim
+      dockerfile: ./docker/codebuild.Dockerfile
+    container_name: go-lambda-codebuild
+    image: go-lambda-codebuild

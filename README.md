@@ -24,3 +24,15 @@ aws cloudformation package --template-file samTemplate.yaml --s3-bucket <bucket-
 
 # safe deployments
 [urce](https://github.com/awslabs/serverless-application-model/blob/master/docs/safe_lambda_deployments.rst)
+
+# SAM Local
+look into
+- local testing
+    - `sam local invoke --event test/api-helloworldevent-1.json HelloWorldFunction`
+- local debugging (node more so than go)
+
+# manual deployment (non cicd)
+```sh
+aws cloudformation package --template-file template.yaml --s3-bucket alejandroquesada.com --output-template-file NewSamTemplate.yaml;
+aws cloudformation deploy --template-file /Users/alejandroquesada/go/src/alejandroqueada.com/lambda/NewSamTemplate.yaml --stack-name alejandroquesada-stack-1 --capabilities CAPABILITY_IAM;
+```

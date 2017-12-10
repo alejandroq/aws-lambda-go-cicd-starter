@@ -41,67 +41,39 @@ endif
 MAKEFILE = $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 
 docker:
-	echo $(CURDIR)
 	docker run --rm\
 		-e HANDLER=$(HANDLER)\
 		-e PACKAGE=$(PACKAGE)\
 		-e GOPATH=$(GOPATH)\
 		-e LDFLAGS='$(LDFLAGS)'\
-		-v $(CURDIR):$(CURDIR)\
-		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
+		-v $(CURDIR):$(CURDIR):Z\
+		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP)):Z\
 		-w $(CURDIR)\
 		eawsy/aws-lambda-go-shim:latest make -f $(MAKEFILE) all
 
 .PHONY: docker
 
-docker-codebuild:
-	docker run --rm\
-		-e HANDLER=$(HANDLER)\
-		-e PACKAGE=$(PACKAGE)\
-		-e LDFLAGS='$(LDFLAGS)'\
-		-v $(CURDIR):/root/go/src/go-lambda.com\
-		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
-		-w /root/go/src/go-lambda.com\
-		go-lambda-codebuild:latest make -f $(MAKEFILE) all
-
-# docker-codebuild:
-# 	docker run  -it --rm\
-# 		-e HANDLER=$(HANDLER)\
-# 		-e PACKAGE=$(PACKAGE)\
-# 		-e LDFLAGS='$(LDFLAGS)'\
-# 		-v $(CURDIR):/root/go/src/go-lambda.com\
-# 		-w /root/go/src/go-lambda.com\
-# 		go-lambda-codebuild:latest bash
-
-.PHONY: docker-codebuild
-
-all: test build pack perm
+all: build pack perm
 
 .PHONY: all
 
-test:
-	go test ./...
-
-.PHONY: test
-
-build: dist
-	go install -buildmode=plugin -ldflags='-w -s $(LDFLAGS)' ./src
-	mv $(GOPATH)/pkg/linux_amd64_dynlink/go-lambda.com/src.a ./dist/$(HANDLER).so
+build:
+	go build -buildmode=plugin -ldflags='-w -s $(LDFLAGS)' -o $(HANDLER).so
 
 .PHONY: build
 
 pack:
-	pack $(HANDLER) dist/$(HANDLER).so $(PACKAGE).zip
-	mv $(PACKAGE).zip dist/
+	pack $(HANDLER) $(HANDLER).so $(PACKAGE).zip
 
 .PHONY: pack
 
 perm:
-	chown $(shell stat -c '%u:%g' .) dist/$(HANDLER).so dist/$(PACKAGE).zip
+	chown $(shell stat -c '%u:%g' .) $(HANDLER).so $(PACKAGE).zip
 
 .PHONY: perm
 
 clean:
-	$(RM) dist/$(HANDLER).so dist/$(PACKAGE).zip
+	$(RM) $(HANDLER).so $(PACKAGE).zip
 
 .PHONY: clean
+

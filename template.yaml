@@ -4,14 +4,13 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Says Hello World.
 
-Properties:
-  S3BucketName:
-    Description: S3 bucket where code assets are stored
-    Type: String
-  S3KeyName:
-    Description: S3 key name for stored code assets .zip
-    Type: String
-
+# Properties:
+#   S3BucketName:
+#     Description: S3 bucket where code assets are stored
+#     Type: String
+#   S3KeyName:
+#     Description: S3 key name for stored code assets .zip
+#     Type: String
 
 Resources:
   HelloWorldFunction:
