@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-  go-lambda-codebuild:
+  go-lambda-helper:
     build:
       context: .
-      dockerfile: ./docker/codebuild.Dockerfile
-    container_name: go-lambda-codebuild
-    image: go-lambda-codebuild
+      dockerfile: ./docker/Dockerfile
+    container_name: go-lambda-helper
+    image: go-lambda-helper

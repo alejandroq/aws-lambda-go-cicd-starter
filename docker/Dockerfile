@@ -7,4 +7,5 @@ RUN true\
 ENV GOPATH=/root/go
 
 RUN go get -u -d -v github.com/eawsy/aws-lambda-go-core/...\
-    && go get -u -d -v github.com/eawsy/aws-lambda-go-event/...
+    && go get -u -d -v github.com/eawsy/aws-lambda-go-event/...\
+    && go get -u -d github.com/awslabs/aws-sam-local 

@@ -4,14 +4,6 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Says Hello World.
 
-# Properties:
-#   S3BucketName:
-#     Description: S3 bucket where code assets are stored
-#     Type: String
-#   S3KeyName:
-#     Description: S3 key name for stored code assets .zip
-#     Type: String
-
 Resources:
   HelloWorldFunction:
       Type: AWS::Serverless::Function
@@ -26,11 +18,10 @@ Resources:
             Properties:
               Path: /hello
               Method: get
+        # creates CodeDeploy resource preference
+        AutoPublishAlias: Prod
+        DeploymentPreference:
+          Type: Canary10Percent5Minutes
       Enviornment:
         Variables:
           HELLO: "Hello World, I am an Env Variable"
-      
-      # creates CodeDeploy resource preference
-      AutoPublishAlias: Prod
-      DeploymentPreference:
-        Type: Canary50Percent10Minutes

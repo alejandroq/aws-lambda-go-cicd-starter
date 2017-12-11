@@ -10,5 +10,5 @@ import (
 // Handle is the primary Lambda handling function.
 func Handle(evt *apigatewayproxyevt.Event, ctx *runtime.Context) (interface{}, error) {
 	log.Println(evt)
-	return nil, nil
+	return "Hello World", nil
 }

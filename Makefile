@@ -28,43 +28,20 @@
 HANDLER ?= handler
 PACKAGE ?= $(HANDLER)
 
-ifeq ($(OS),Windows_NT)
-	GOPATH ?= $(USERPROFILE)/go
-	GOPATH := /$(subst ;,:/,$(subst \,/,$(subst :,,$(GOPATH))))
-	CURDIR := /$(subst :,,$(CURDIR))
-	RM := del /q
-else
-	GOPATH ?= $(HOME)/go
-	RM := rm -f
-endif
+RM := rm -f
 
 MAKEFILE = $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 
 docker:
-	echo $(CURDIR)
-	docker run --rm\
-		-e HANDLER=$(HANDLER)\
-		-e PACKAGE=$(PACKAGE)\
-		-e GOPATH=$(GOPATH)\
-		-e LDFLAGS='$(LDFLAGS)'\
-		-v $(CURDIR):$(CURDIR)\
+	docker run -e HANDLER=$(HANDLER) \
+		-e PACKAGE=$(PACKAGE) \
+		-e LDFLAGS='$(LDFLAGS)' \
+		-v $(CURDIR):/root/go/src/go-lambda.com \
 		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
-		-w $(CURDIR)\
-		eawsy/aws-lambda-go-shim:latest make -f $(MAKEFILE) all
+		-w /root/go/src/go-lambda.com \
+		go-lambda-helper:latest make -f $(MAKEFILE) all
 
 .PHONY: docker
-
-docker-codebuild:
-	docker run --rm\
-		-e HANDLER=$(HANDLER)\
-		-e PACKAGE=$(PACKAGE)\
-		-e LDFLAGS='$(LDFLAGS)'\
-		-v $(CURDIR):/root/go/src/go-lambda.com\
-		$(foreach GP,$(subst :, ,$(GOPATH)),-v $(GP):$(GP))\
-		-w /root/go/src/go-lambda.com\
-		go-lambda-codebuild:latest make -f $(MAKEFILE) all
-
-.PHONY: docker-codebuild
 
 all: test build pack perm
 
